@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 st.title("School Spending Dashboard")
@@ -92,6 +91,7 @@ fig2 = px.bar(
 fig2.update_layout(
     height=800,           # increase height
     width=1200,           # optional: increase width
+    xaxis_tickangle=-45, 
 )
 
 st.plotly_chart(fig2, use_container_width=True)
@@ -106,7 +106,7 @@ stacked_data = (
     .reset_index()
 )
 
-fig = px.bar(
+fig3 = px.bar(
     stacked_data,
     x="year_month",          # now exists
     y="amount",
@@ -116,7 +116,22 @@ fig = px.bar(
     barmode="stack"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig3, use_container_width=True)
+
+
+
+heatmap_data = filtered_df.groupby(["School Name", "year_month"])["amount"].sum().reset_index()
+
+fig4 = px.density_heatmap(
+    heatmap_data,
+    x="year_month",
+    y="School Name",
+    z="amount",
+    color_continuous_scale="Viridis",
+    title="Spending Heatmap: School vs Month"
+)
+
+st.plotly_chart(fig4, use_container_width=True)
 
 # -----------------------------
 # Raw Data (Optional)
